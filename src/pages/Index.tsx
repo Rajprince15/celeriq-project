@@ -9,7 +9,6 @@ const Index = () => {
   const [videoStarted, setVideoStarted] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAnyCardHovered, setIsAnyCardHovered] = useState(false);
 
   const handleProjectClick = (project: Project) => {
     setSelectedProject(project);
@@ -23,13 +22,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Backdrop overlay when card is hovered */}
-      <div 
-        className={`fixed inset-0 bg-black/80 backdrop-blur-sm transition-all duration-700 pointer-events-none ${
-          isAnyCardHovered ? "opacity-100 z-50" : "opacity-0 z-0"
-        }`}
-      />
-
       {/* Hero Video Section with Ben 10 Animation */}
       <HeroVideo onVideoStart={() => setVideoStarted(true)} />
       
@@ -58,7 +50,6 @@ const Index = () => {
                   project={project}
                   onClick={() => handleProjectClick(project)}
                   index={index}
-                  onHoverChange={setIsAnyCardHovered}
                 />
               ))}
             </div>
