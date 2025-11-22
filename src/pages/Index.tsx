@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import HeroVideo from "@/components/HeroVideo";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectModal from "@/components/ProjectModal";
 import BackToTop from "@/components/BackToTop";
+import TechBackground from "@/components/TechBackground";
 import { projects, Project } from "@/data/projects";
 
 const Index = () => {
   const [videoStarted, setVideoStarted] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  
+  const sectionHeaderRef = useRef<HTMLDivElement>(null);
+  const techSectionRef = useRef<HTMLDivElement>(null);
+  const ctaSectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleProjectClick = (project: Project) => {
     setSelectedProject(project);
@@ -21,17 +36,27 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-background">
+      {/* Animated Tech Background */}
+      <TechBackground />
+      
       {/* Hero Video Section with Ben 10 Animation */}
       <HeroVideo onVideoStart={() => setVideoStarted(true)} />
       
       {/* Main Content */}
-      <main className="relative z-20 bg-background">
+      <main className="relative z-20 bg-transparent">
         {/* Project Showcase Section */}
         <section className="px-4 py-20">
           <div className="mx-auto max-w-7xl">
-            {/* Section Header */}
-            <div className="mb-16 text-center animate-fade-in">
+            {/* Section Header with Parallax */}
+            <div 
+              ref={sectionHeaderRef}
+              className="mb-16 text-center animate-fade-in"
+              style={{
+                transform: `translateY(${scrollY * 0.1}px)`,
+                transition: 'transform 0.1s ease-out'
+              }}
+            >
               <h2 className="mb-4 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
                 <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 bg-clip-text text-transparent">
                   Featured Projects
@@ -57,9 +82,16 @@ const Index = () => {
         </section>
 
         {/* Technologies & Skills Section */}
-        <section className="px-4 py-20 bg-muted/30">
+        <section className="px-4 py-20 bg-muted/30 backdrop-blur-sm">
           <div className="mx-auto max-w-6xl">
-            <h3 className="mb-12 text-center text-4xl font-bold text-foreground">
+            <h3 
+              ref={techSectionRef}
+              className="mb-12 text-center text-4xl font-bold text-foreground"
+              style={{
+                transform: `translateY(${scrollY * 0.05}px)`,
+                transition: 'transform 0.1s ease-out'
+              }}
+            >
               Technologies & Skills
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
@@ -83,10 +115,12 @@ const Index = () => {
               ].map((tech, idx) => (
                 <div
                   key={idx}
-                  className="animate-fade-in rounded-lg border border-border/50 bg-card/50 px-6 py-3 backdrop-blur-sm transition-all hover:scale-105 hover:border-primary/50 hover:shadow-lg"
+                  className="animate-fade-in rounded-lg border border-border/50 bg-card/70 px-6 py-3 backdrop-blur-md transition-all hover:scale-105 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/20"
                   style={{
                     animationDelay: `${idx * 50}ms`,
-                    animationFillMode: 'both'
+                    animationFillMode: 'both',
+                    transform: `translateY(${Math.sin((scrollY + idx * 100) * 0.002) * 10}px)`,
+                    transition: 'transform 0.3s ease-out'
                   }}
                 >
                   <span className="text-sm font-medium">{tech}</span>
@@ -98,8 +132,15 @@ const Index = () => {
 
         {/* Call to Action Section */}
         <section className="px-4 py-20">
-          <div className="mx-auto max-w-4xl">
-            <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-cyan-500/10 p-12 text-center backdrop-blur-sm">
+          <div 
+            ref={ctaSectionRef}
+            className="mx-auto max-w-4xl"
+            style={{
+              transform: `translateY(${scrollY * 0.08}px)`,
+              transition: 'transform 0.1s ease-out'
+            }}
+          >
+            <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-cyan-500/10 p-12 text-center backdrop-blur-md">
               <h3 className="mb-4 text-4xl font-bold text-foreground">
                 Let's Build Something Amazing
               </h3>
@@ -115,7 +156,7 @@ const Index = () => {
                 </button>
                 <button
                   onClick={() => window.open('/your-resume.pdf', '_blank')}
-                  className="rounded-full border-2 border-primary bg-background/50 px-8 py-4 text-lg font-semibold backdrop-blur-sm transition-all hover:scale-105 hover:bg-primary hover:text-primary-foreground"
+                  className="rounded-full border-2 border-primary bg-background/70 px-8 py-4 text-lg font-semibold backdrop-blur-sm transition-all hover:scale-105 hover:bg-primary hover:text-primary-foreground"
                 >
                   View Resume
                 </button>

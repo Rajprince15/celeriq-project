@@ -11,7 +11,9 @@ interface ProjectCardProps {
 const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -27,18 +29,32 @@ const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
     }
   }, [isHovered, videoLoaded]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleVideoLoad = () => {
     setVideoLoaded(true);
   };
 
+  // Calculate parallax offset based on card position and index
+  const parallaxOffset = Math.sin((scrollY + index * 200) * 0.002) * 10;
+
   return (
     <div
-      className={`group relative overflow-hidden rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm transition-all duration-500 ease-out cursor-pointer animate-fade-in ${
+      ref={cardRef}
+      className={`group relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 backdrop-blur-md transition-all duration-500 ease-out cursor-pointer animate-fade-in ${
         isHovered ? "scale-[2] z-50 shadow-2xl shadow-primary/20" : "scale-100 hover:shadow-xl"
       }`}
       style={{
         animationDelay: `${index * 100}ms`,
         animationFillMode: 'both',
+        transform: isHovered ? 'scale(2)' : `translateY(${parallaxOffset}px)`,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -63,7 +79,7 @@ const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
         {/* Fallback Thumbnail */}
         <div
           className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${project.accentColor} transition-opacity duration-300 ${
-            isHovered && videoLoaded ? "opacity-0" : "opacity-100"
+            isHovered && videoLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
           <div className="text-center text-white">
@@ -71,13 +87,6 @@ const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
             <p className="text-sm font-medium opacity-90">{project.category}</p>
           </div>
         </div>
-
-        {/* Hover Overlay - Only show when video is not loaded/playing */}
-        <div
-          className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 ${
-            isHovered && !videoLoaded ? "opacity-100" : "opacity-0"
-          }`}
-        />
       </div>
 
       {/* Content */}
@@ -127,12 +136,11 @@ const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
         </div>
       </div>
 
-      {/* Animated Border */}
+      {/* Animated Border Glow */}
       <div
-        className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${project.accentColor} opacity-0 transition-opacity duration-300 ${
-          isHovered ? "opacity-20" : ""
+        className={`absolute inset-0 -z-10 rounded-2xl bg-gradient-to-r ${project.accentColor} opacity-0 blur-xl transition-opacity duration-300 ${
+          isHovered ? "opacity-30" : ""
         }`}
-        style={{ clipPath: "inset(0 round 1rem)" }}
       />
     </div>
   );
