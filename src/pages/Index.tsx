@@ -5,6 +5,7 @@ import ProjectModal from "@/components/ProjectModal";
 import BackToTop from "@/components/BackToTop";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
+import BackgroundAnimation from "@/components/BackgroundAnimation";
 import { projects, Project } from "@/data/projects";
 
 const Index = () => {
@@ -52,7 +53,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-background">
-      
+      {/* AI-themed Background Animation */}
+      <BackgroundAnimation show={videoStarted} />
       
       {/* Theme Toggle Button */}
       <ThemeToggle show={showThemeToggle} />

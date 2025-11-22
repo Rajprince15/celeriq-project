@@ -35,9 +35,9 @@ export default function Footer() {
   return (
     <footer className="relative bg-gradient-to-b from-background to-muted/20 border-t border-border overflow-hidden">
       <div className="container mx-auto px-6 py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
           {/* Company Info */}
-          <div className="lg:col-span-2">
+          <div className="md:col-span-1">
             <div className="mb-6">
               <div className="flex items-center space-x-3 mb-4">
                 <img 
@@ -85,17 +85,15 @@ export default function Footer() {
             </div>
           </div>
 
-          
-
           {/* Services Links */}
-          <div>
+          <div className="md:col-span-1">
             <h4 className="text-lg font-semibold text-foreground mb-6">Services</h4>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
                   <a 
                     href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors duration-200"
                   >
                     {link.name}
                   </a>
@@ -105,14 +103,14 @@ export default function Footer() {
           </div>
 
           {/* Resources Links */}
-          <div>
+          <div className="md:col-span-1">
             <h4 className="text-lg font-semibold text-foreground mb-6">Resources</h4>
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
                   <a 
                     href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors duration-200"
                   >
                     {link.name}
                   </a>
@@ -122,12 +120,17 @@ export default function Footer() {
           </div>
         </div>
 
-        
-
-        
-         
-
-        
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t border-border/50">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} CelerIQ. All rights reserved.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Built with passion and innovation
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Animated background particles */}
