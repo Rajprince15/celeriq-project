@@ -9,8 +9,50 @@ interface HeroVideoProps {
 const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
   const [showButton, setShowButton] = useState(true);
   const [videoStarted, setVideoStarted] = useState(false);
+  const [scrollEnabled, setScrollEnabled] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  // Disable/Enable scroll based on scrollEnabled state
+  useEffect(() => {
+    const preventScroll = (e: Event) => {
+      if (!scrollEnabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    };
+
+    if (!scrollEnabled) {
+      // Lock scroll
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+      
+      window.addEventListener('wheel', preventScroll, { passive: false });
+      window.addEventListener('touchmove', preventScroll, { passive: false });
+      window.addEventListener('scroll', preventScroll, { passive: false });
+    } else {
+      // Enable scroll
+      document.body.style.overflow = 'unset';
+      document.body.style.position = 'unset';
+      document.body.style.width = 'auto';
+      document.body.style.height = 'auto';
+    }
+
+    return () => {
+      window.removeEventListener('wheel', preventScroll);
+      window.removeEventListener('touchmove', preventScroll);
+      window.removeEventListener('scroll', preventScroll);
+      
+      // Cleanup on unmount
+      document.body.style.overflow = 'unset';
+      document.body.style.position = 'unset';
+      document.body.style.width = 'auto';
+      document.body.style.height = 'auto';
+    };
+  }, [scrollEnabled]);
 
   const handleExploreClick = () => {
     setShowButton(false);
@@ -28,14 +70,20 @@ const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
     const video = videoRef.current;
     
     const handleVideoEnd = () => {
+      // Enable scrolling
+      setScrollEnabled(true);
+      
       // Smooth scroll to content after video ends
-      if (contentRef.current) {
-        const targetPosition = window.innerHeight;
-        window.scrollTo({
-          top: targetPosition,
-          behavior: "smooth",
-        });
-      }
+      setTimeout(() => {
+        if (contentRef.current) {
+          const targetPosition = window.innerHeight;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: "smooth",
+          });
+        }
+      }, 100);
+      
       onVideoStart?.();
     };
 
@@ -52,6 +100,9 @@ const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
 
   useEffect(() => {
     const handleScroll = () => {
+      // Only apply parallax if scroll is enabled
+      if (!scrollEnabled) return;
+      
       const scrolled = window.scrollY;
       if (videoRef.current && scrolled > 0) {
         // Parallax effect on video
@@ -61,7 +112,7 @@ const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [scrollEnabled]);
 
   return (
     <>
