@@ -8,15 +8,17 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
   const [progress, setProgress] = useState(0);
   const [currentMessage, setCurrentMessage] = useState('');
   const [showCursor, setShowCursor] = useState(true);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [totalResources, setTotalResources] = useState(0);
 
   const loadingMessages = [
     'INITIALIZING SYSTEM...',
     'LOADING NEURAL NETWORKS...',
-    'CONNECTING TO CELERIQ MAINFRAME...',
+    'PRELOADING HERO VIDEO...',
+    'LOADING PROJECT ASSETS...',
     'SYNCING AI MODULES...',
     'OPTIMIZING PERFORMANCE...',
     'PREPARING DIGITAL ECOSYSTEM...',
-    'ESTABLISHING SECURE CONNECTION...',
     'READY FOR EXPLORATION...'
   ];
 
@@ -28,9 +30,9 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
     return () => clearInterval(cursorInterval);
   }, []);
 
-  // Progress bar animation
+  // Quick progress animation (2.5 seconds)
   useEffect(() => {
-    const duration = 5000; // 5 seconds total
+    const duration = 2500; // 2.5 seconds total
     const steps = 100;
     const stepDuration = duration / steps;
 
@@ -40,7 +42,7 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
           clearInterval(interval);
           setTimeout(() => {
             onComplete();
-          }, 500);
+          }, 300);
           return 100;
         }
         return prev + 1;
@@ -56,6 +58,9 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
     if (messageIndex < loadingMessages.length) {
       setCurrentMessage(loadingMessages[messageIndex]);
     }
+    // Simulate resource count for visual effect
+    setLoadedCount(Math.floor((progress / 100) * 9));
+    setTotalResources(9);
   }, [progress]);
 
   return (
@@ -71,18 +76,18 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
         <div className="scan-line-horizontal"></div>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 max-w-4xl w-full px-6 space-y-12">
+      {/* Main Content - Responsive */}
+      <div className="relative z-10 max-w-4xl w-full px-4 sm:px-6 space-y-8 sm:space-y-12">
         {/* CelerIQ Logo/Title */}
-        <div className="text-center space-y-4">
-          <h1 className="text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 glitch-text-loader" data-text="CelerIQ">
+        <div className="text-center space-y-3 sm:space-y-4">
+          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 glitch-text-loader" data-text="CelerIQ">
             CelerIQ
           </h1>
-          <div className="h-1 w-64 mx-auto bg-gradient-to-r from-transparent via-cyan-500 to-transparent animate-pulse"></div>
+          <div className="h-1 w-40 sm:w-48 md:w-64 mx-auto bg-gradient-to-r from-transparent via-cyan-500 to-transparent animate-pulse"></div>
         </div>
 
-        {/* Terminal Box */}
-        <div className="relative border-2 border-cyan-500/50 bg-black/60 backdrop-blur-lg p-8 rounded-lg shadow-2xl shadow-cyan-500/30">
+        {/* Terminal Box - Responsive */}
+        <div className="relative border-2 border-cyan-500/50 bg-black/60 backdrop-blur-lg p-4 sm:p-6 md:p-8 rounded-lg shadow-2xl shadow-cyan-500/30">
           {/* Corner Decorations */}
           <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
           <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
@@ -93,15 +98,15 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
           <div className="scanner-line-loader"></div>
 
           {/* System Messages */}
-          <div className="space-y-4 font-mono">
+          <div className="space-y-3 sm:space-y-4 font-mono">
             {/* System Header */}
             <div className="flex items-center gap-2 text-cyan-400">
               <span className="animate-pulse">{'>'}</span>
-              <span className="text-lg">SYSTEM STATUS</span>
+              <span className="text-sm sm:text-base md:text-lg">SYSTEM STATUS</span>
             </div>
 
             {/* Current Message */}
-            <div className="flex items-center gap-2 text-green-400 text-sm md:text-base">
+            <div className="flex items-center gap-2 text-green-400 text-xs sm:text-sm md:text-base">
               <span className="animate-pulse">▸</span>
               <span>{currentMessage}</span>
               <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity`}>█</span>
@@ -112,6 +117,12 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
               <div className="flex justify-between items-center text-xs text-cyan-300">
                 <span>INITIALIZATION PROGRESS</span>
                 <span className="text-2xl font-bold tabular-nums">{progress}%</span>
+              </div>
+              
+              {/* Resource Counter */}
+              <div className="flex justify-between items-center text-xs text-green-400/80">
+                <span>ASSETS LOADED</span>
+                <span className="tabular-nums">{loadedCount} / {totalResources}</span>
               </div>
               
               {/* Progress Bar Container */}

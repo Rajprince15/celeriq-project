@@ -87,35 +87,35 @@ const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="relative p-6">
-        <div className="mb-2 flex items-start justify-between">
-          <h3 className="text-xl font-bold tracking-tight transition-all duration-300">
+      {/* Content - Responsive padding */}
+      <div className="relative p-4 sm:p-5 md:p-6">
+        <div className="mb-2 flex items-start justify-between gap-2">
+          <h3 className="text-lg sm:text-xl font-bold tracking-tight transition-all duration-300">
             {project.title}
           </h3>
           {project.liveLink !== "#" && (
-            <ExternalLink className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
+            <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
           )}
         </div>
 
-        <p className={`mb-4 text-sm text-muted-foreground transition-all duration-300 ${
+        <p className={`mb-3 sm:mb-4 text-xs sm:text-sm text-muted-foreground transition-all duration-300 ${
           isHovered ? "line-clamp-none" : "line-clamp-2"
         }`}>
           {project.description}
         </p>
 
         {/* Tech Stack Pills */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {project.techStack.slice(0, isHovered ? undefined : 3).map((tech, idx) => (
             <span
               key={idx}
-              className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+              className="rounded-full bg-primary/10 px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs font-medium text-primary"
             >
               {tech}
             </span>
           ))}
           {!isHovered && project.techStack.length > 3 && (
-            <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+            <span className="rounded-full bg-muted px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs font-medium text-muted-foreground">
               +{project.techStack.length - 3}
             </span>
           )}
@@ -123,12 +123,12 @@ const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
 
         {/* Hover Indicator */}
         <div
-          className={`mt-4 flex items-center gap-2 text-sm font-medium text-primary transition-opacity duration-300 ${
+          className={`mt-3 sm:mt-4 flex items-center gap-2 text-xs sm:text-sm font-medium text-primary transition-opacity duration-300 ${
             isHovered ? "opacity-100" : "opacity-0"
           }`}
         >
           <span>Click to view details</span>
-          <ExternalLink className="h-4 w-4" />
+          <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
         </div>
       </div>
 
