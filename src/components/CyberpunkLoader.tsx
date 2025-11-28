@@ -30,9 +30,9 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
     return () => clearInterval(cursorInterval);
   }, []);
 
-  // Quick progress animation (2.5 seconds)
+  // Quick progress animation (4 seconds)
   useEffect(() => {
-    const duration = 2500; // 2.5 seconds total
+    const duration = 5000; // 4 seconds total
     const steps = 100;
     const stepDuration = duration / steps;
 
@@ -78,22 +78,25 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
 
       {/* Main Content - Responsive */}
       <div className="relative z-10 max-w-4xl w-full px-4 sm:px-6 space-y-8 sm:space-y-12">
-        {/* CelerIQAI Logo/Title */}
+        {/* CelerIQ AI Logo/Title */}
         <div className="text-center space-y-3 sm:space-y-4">
-          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black glitch-text-loader" data-text="CelerIQAI">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">CelerIQ</span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-violet-500 animate-rainbow">AI</span>
+          <h1 className="text-7xl sm:text-8xl md:text-9xl font-black text-cyan-400 drop-shadow-[0_0_50px_rgba(6,182,212,1)]" data-text="CelerIQ AI" style={{ 
+            textShadow: '0 0 60px rgba(6,182,212,1), 0 0 100px rgba(59,130,246,0.8), 0 0 140px rgba(6,182,212,0.6)',
+            WebkitTextStroke: '2px rgba(6,182,212,0.5)',
+            fontWeight: 900
+          }}>
+            CelerIQ AI
           </h1>
-          <div className="h-1 w-40 sm:w-48 md:w-64 mx-auto bg-gradient-to-r from-transparent via-cyan-500 to-transparent animate-pulse"></div>
+          <div className="h-2 w-48 sm:w-56 md:w-72 mx-auto bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse shadow-[0_0_30px_rgba(6,182,212,1)]"></div>
         </div>
 
         {/* Terminal Box - Responsive */}
-        <div className="relative border-2 border-cyan-500/50 bg-black/60 backdrop-blur-lg p-4 sm:p-6 md:p-8 rounded-lg shadow-2xl shadow-cyan-500/30">
+        <div className="relative border-2 border-cyan-500/70 bg-black/70 backdrop-blur-lg p-4 sm:p-6 md:p-8 rounded-lg shadow-2xl shadow-cyan-500/50">
           {/* Corner Decorations */}
-          <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
-          <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
-          <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400"></div>
-          <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></div>
+          <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.6)]"></div>
+          <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.6)]"></div>
+          <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.6)]"></div>
+          <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.6)]"></div>
 
           {/* Scanning Effect */}
           <div className="scanner-line-loader"></div>
@@ -102,22 +105,22 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
           <div className="space-y-3 sm:space-y-4 font-mono">
             {/* System Header */}
             <div className="flex items-center gap-2 text-cyan-400">
-              <span className="animate-pulse">{'>'}</span>
-              <span className="text-sm sm:text-base md:text-lg">SYSTEM STATUS</span>
+              <span className="animate-pulse text-lg">{'>'}</span>
+              <span className="text-base sm:text-lg md:text-xl font-bold">SYSTEM STATUS</span>
             </div>
 
             {/* Current Message */}
-            <div className="flex items-center gap-2 text-green-400 text-xs sm:text-sm md:text-base">
-              <span className="animate-pulse">▸</span>
-              <span>{currentMessage}</span>
-              <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity`}>█</span>
+            <div className="flex items-center gap-2 text-green-400 text-sm sm:text-base md:text-lg font-bold">
+              <span className="animate-pulse text-cyan-400 text-lg">▸</span>
+              <span className="drop-shadow-[0_0_12px_rgba(34,197,94,1)]" style={{ textShadow: '0 0 15px rgba(34,197,94,0.9)' }}>{currentMessage}</span>
+              <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity text-cyan-400`}>█</span>
             </div>
 
             {/* Progress Bar */}
             <div className="space-y-2 pt-4">
-              <div className="flex justify-between items-center text-xs text-cyan-300">
-                <span>INITIALIZATION PROGRESS</span>
-                <span className="text-2xl font-bold tabular-nums">{progress}%</span>
+              <div className="flex justify-between items-center text-sm text-cyan-300">
+                <span className="font-bold text-base">INITIALIZATION PROGRESS</span>
+                <span className="text-3xl font-black tabular-nums text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,1)]" style={{ textShadow: '0 0 20px rgba(6,182,212,1), 0 0 40px rgba(6,182,212,0.8)' }}>{progress}%</span>
               </div>
               
               {/* Resource Counter */}
@@ -161,18 +164,18 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
         </div>
 
         {/* Status Indicators */}
-        <div className="grid grid-cols-3 gap-4 text-center font-mono text-xs">
-          <div className="space-y-1">
-            <div className={`w-3 h-3 mx-auto rounded-full ${progress > 30 ? 'bg-green-500' : 'bg-gray-600'} animate-pulse`}></div>
-            <div className={progress > 30 ? 'text-green-400' : 'text-gray-500'}>NEURAL NET</div>
+        <div className="grid grid-cols-3 gap-4 text-center font-mono text-sm sm:text-base">
+          <div className="space-y-2">
+            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 30 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
+            <div className={`font-bold ${progress > 30 ? 'text-green-400' : 'text-gray-500'}`}>NEURAL NET</div>
           </div>
-          <div className="space-y-1">
-            <div className={`w-3 h-3 mx-auto rounded-full ${progress > 60 ? 'bg-green-500' : 'bg-gray-600'} animate-pulse`}></div>
-            <div className={progress > 60 ? 'text-green-400' : 'text-gray-500'}>AI MODULES</div>
+          <div className="space-y-2">
+            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 60 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
+            <div className={`font-bold ${progress > 60 ? 'text-green-400' : 'text-gray-500'}`}>AI MODULES</div>
           </div>
-          <div className="space-y-1">
-            <div className={`w-3 h-3 mx-auto rounded-full ${progress > 90 ? 'bg-green-500' : 'bg-gray-600'} animate-pulse`}></div>
-            <div className={progress > 90 ? 'text-green-400' : 'text-gray-500'}>READY</div>
+          <div className="space-y-2">
+            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 90 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
+            <div className={`font-bold ${progress > 90 ? 'text-green-400' : 'text-gray-500'}`}>READY</div>
           </div>
         </div>
       </div>

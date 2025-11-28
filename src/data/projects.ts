@@ -49,9 +49,9 @@ export const projects: Project[] = [
   },
   {
     id: 4,
-    title: "Owner Renter",
-    description: "Full-stack property management platform connecting property owners with potential renters. Features include listing management, search filters, and secure messaging.",
-    techStack: ["React", "Node.js", "MongoDB", "Express"],
+    title: "Homer",
+    description: " Homer is a smart rental marketplace where renters can find properties and owners can list, verify, and manage their rentals with ease. It also introduces a Reverse Marketplace where renters post what they want and owners apply, plus an AI-powered Advanced Lifestyle Filter that finds homes based on real-world comfort factors like safety, commute, noise, and convenience.",
+    techStack: ["React", "Tailwind CSS", "PostCSS", "CRACO", "React Router", "Axios", "Framer Motion", "Chart.js", "Lucide React", "MySQL", "Redis", "Stripe", "Razorpay", "Netlify", "i18n"],
     liveLink: "#", // Update with your actual link
     videoPath: "/videos/projects/project-4.mp4",
     thumbnail: "/placeholder.svg",
@@ -84,7 +84,7 @@ export const projects: Project[] = [
     id: 7,
     title: "Gee Ess Opticals",
     description: "Modern e-commerce platform for eyewear retail. Features virtual try-on, prescription management, and seamless checkout experience.",
-    techStack: ["React", "Tailwind CSS", "Firebase", "Stripe"],
+    techStack: ["React, Tailwind CSS, PostCSS, CRACO, React Router, Axios, Sonner, Lucide React, PWA/Service Worker, Stripe, Razorpay, Python, MySQL, Redis, Netlify, i18n"],
     liveLink: "https://geeessopticals.netlify.app",
     videoPath: "/videos/projects/project-7.mp4",
     thumbnail: "/placeholder.svg",
