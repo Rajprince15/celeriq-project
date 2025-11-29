@@ -15,8 +15,7 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
   const loadingMessages = [
     'INITIALIZING SYSTEM...',
     'LOADING NEURAL NETWORKS...',
-    'PRELOADING HERO VIDEO...',
-    'EXTRACTING VIDEO THUMBNAIL...',
+
     'LOADING PROJECT ASSETS...',
     'SYNCING AI MODULES...',
     'OPTIMIZING PERFORMANCE...',
