@@ -58,8 +58,17 @@ const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
     setShowButton(false);
     setVideoStarted(true);
     
-    // Play the video from the beginning
+    // Load and play the video from the beginning
     if (videoRef.current) {
+      // Load video source if not already loaded
+      if (videoRef.current.children.length === 0) {
+        const source = document.createElement('source');
+        source.src = '/videos/hero-video.mp4';
+        source.type = 'video/mp4';
+        videoRef.current.appendChild(source);
+        videoRef.current.load();
+      }
+      
       videoRef.current.currentTime = 0;
       videoRef.current.play();
     }
@@ -124,9 +133,10 @@ const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
           className="absolute inset-0 h-full w-full object-cover"
           muted
           playsInline
-          preload="auto"
+          preload="none"
+          poster="/placeholder.svg"
         >
-          <source src="/videos/hero-video.mp4" type="video/mp4" />
+          {/* Source will be added dynamically when user clicks Explore */}
         </video>
 
         {/* Overlay Gradient */}

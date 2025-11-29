@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Project } from "@/data/projects";
 import { X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import CustomVideoPlayer from "./CustomVideoPlayer";
+import LazyCustomVideoPlayer from "./LazyCustomVideoPlayer";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -16,6 +16,9 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
+      
+      // Clean up: Give video player time to unmount and release resources
+      // This helps prevent memory leaks from loaded videos
     }
 
     return () => {
@@ -42,9 +45,14 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
           <X className="h-6 w-6" />
         </button>
 
-        {/* Video Section with Custom Player */}
+        {/* Video Section with Lazy Custom Player */}
         <div className="relative aspect-video w-full overflow-hidden rounded-t-2xl bg-black">
-          <CustomVideoPlayer videoPath={project.videoPath} className="w-full h-full" />
+          {/* Only load video when modal is actually open */}
+          <LazyCustomVideoPlayer 
+            videoPath={project.videoPath} 
+            className="w-full h-full" 
+            shouldLoad={isOpen}
+          />
           
           {/* Gradient Overlay */}
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />

@@ -57,40 +57,8 @@ const Index = () => {
     setLoadingComplete(true);
   };
 
-  // Background video preloading - happens silently after page loads
-  useEffect(() => {
-    if (!loadingComplete) return;
-
-    const preloadVideo = (src: string) => {
-      const video = document.createElement('video');
-      video.preload = 'auto';
-      video.src = src;
-      video.load();
-    };
-
-    // Preload hero video first (highest priority)
-    setTimeout(() => {
-      preloadVideo('/videos/hero-video.mp4');
-    }, 500);
-
-    // Preload project videos gradually (lower priority)
-    const projectVideos = [
-      '/videos/projects/project-1.mp4',
-      '/videos/projects/project-2.mp4',
-      '/videos/projects/project-3.mp4',
-      '/videos/projects/project-4.mp4',
-      '/videos/projects/project-5.mp4',
-      '/videos/projects/project-6.mp4',
-      '/videos/projects/project-7.mp4',
-      '/videos/projects/project-8.mp4',
-    ];
-
-    projectVideos.forEach((videoPath, index) => {
-      setTimeout(() => {
-        preloadVideo(videoPath);
-      }, 1000 + (index * 300)); // Stagger loading
-    });
-  }, [loadingComplete]);
+  // Removed aggressive video preloading for better performance
+  // Videos will now load on-demand when viewed
 
   // Show loader first
   if (!loadingComplete) {
