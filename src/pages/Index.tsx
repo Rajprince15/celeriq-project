@@ -16,6 +16,8 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [showThemeToggle, setShowThemeToggle] = useState(false);
+  const [preloadedVideo, setPreloadedVideo] = useState<HTMLVideoElement | null>(null);
+  const [heroThumbnail, setHeroThumbnail] = useState<string | null>(null);
   
   const sectionHeaderRef = useRef<HTMLDivElement>(null);
   const techSectionRef = useRef<HTMLDivElement>(null);
@@ -53,12 +55,11 @@ const Index = () => {
     }, 500);
   };
 
-  const handleLoadingComplete = () => {
+  const handleLoadingComplete = (videoElement: HTMLVideoElement | null, thumbnail: string | null) => {
+    setPreloadedVideo(videoElement);
+    setHeroThumbnail(thumbnail);
     setLoadingComplete(true);
   };
-
-  // Removed aggressive video preloading for better performance
-  // Videos will now load on-demand when viewed
 
   // Show loader first
   if (!loadingComplete) {
@@ -73,8 +74,12 @@ const Index = () => {
       {/* Theme Toggle Button */}
       <ThemeToggle show={showThemeToggle} />
       
-      {/* Hero Video Section with Ben 10 Animation */}
-      <HeroVideo onVideoStart={handleVideoStart} />
+      {/* Hero Video Section with Animation */}
+      <HeroVideo 
+        onVideoStart={handleVideoStart} 
+        preloadedVideo={preloadedVideo}
+        thumbnail={heroThumbnail}
+      />
       
       {/* Main Content */}
       <main className="relative z-20 bg-transparent">

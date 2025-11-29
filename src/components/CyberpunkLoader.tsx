@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 interface CyberpunkLoaderProps {
-  onComplete: () => void;
+  onComplete: (videoElement: HTMLVideoElement | null, thumbnail: string | null) => void;
 }
 
 const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
@@ -10,17 +10,74 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
   const [showCursor, setShowCursor] = useState(true);
   const [loadedCount, setLoadedCount] = useState(0);
   const [totalResources, setTotalResources] = useState(0);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   const loadingMessages = [
     'INITIALIZING SYSTEM...',
     'LOADING NEURAL NETWORKS...',
     'PRELOADING HERO VIDEO...',
+    'EXTRACTING VIDEO THUMBNAIL...',
     'LOADING PROJECT ASSETS...',
     'SYNCING AI MODULES...',
     'OPTIMIZING PERFORMANCE...',
     'PREPARING DIGITAL ECOSYSTEM...',
     'READY FOR EXPLORATION...'
   ];
+
+  // Preload hero video
+  useEffect(() => {
+    const video = document.createElement('video');
+    video.preload = 'auto';
+    video.muted = true;
+    video.playsInline = true;
+    video.crossOrigin = 'anonymous';
+    
+    const handleCanPlay = () => {
+      setVideoLoaded(true);
+      
+      // Extract thumbnail from first frame
+      video.currentTime = 0;
+      
+      const extractThumbnail = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth || 1920;
+          canvas.height = video.videoHeight || 1080;
+          const ctx = canvas.getContext('2d');
+          
+          if (ctx) {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const thumbnailUrl = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Store video and thumbnail for later use
+            (window as any).__heroVideoElement = video;
+            (window as any).__heroThumbnail = thumbnailUrl;
+          }
+        } catch (error) {
+          console.error('Error extracting thumbnail:', error);
+        }
+      };
+
+      // Wait a bit for video to be ready for thumbnail extraction
+      video.addEventListener('seeked', extractThumbnail, { once: true });
+    };
+
+    const handleError = () => {
+      console.warn('Hero video failed to preload');
+      setVideoLoaded(true); // Continue anyway
+    };
+
+    video.addEventListener('canplaythrough', handleCanPlay, { once: true });
+    video.addEventListener('error', handleError, { once: true });
+    
+    video.src = '/videos/hero-video.mp4';
+    video.load();
+
+    return () => {
+      video.removeEventListener('canplaythrough', handleCanPlay);
+      video.removeEventListener('error', handleError);
+    };
+  }, []);
 
   // Cursor blink effect
   useEffect(() => {
@@ -30,18 +87,20 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
     return () => clearInterval(cursorInterval);
   }, []);
 
-  // Quick progress animation (4 seconds)
+  // Quick progress animation (5 seconds)
   useEffect(() => {
-    const duration = 5000; // 4 seconds total
+    const duration = 5000;
     const steps = 100;
     const stepDuration = duration / steps;
 
     const interval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 100) {
+        if (prev >= 100 && videoLoaded) {
           clearInterval(interval);
           setTimeout(() => {
-            onComplete();
+            const videoElement = (window as any).__heroVideoElement || null;
+            const thumbnail = (window as any).__heroThumbnail || null;
+            onComplete(videoElement, thumbnail);
           }, 300);
           return 100;
         }
@@ -50,7 +109,7 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
     }, stepDuration);
 
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, [onComplete, videoLoaded]);
 
   // Update loading messages based on progress
   useEffect(() => {
@@ -59,8 +118,8 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
       setCurrentMessage(loadingMessages[messageIndex]);
     }
     // Simulate resource count for visual effect
-    setLoadedCount(Math.floor((progress / 100) * 9));
-    setTotalResources(9);
+    setLoadedCount(Math.floor((progress / 100) * 10));
+    setTotalResources(10);
   }, [progress]);
 
   return (
@@ -116,6 +175,16 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
               <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity text-cyan-400`}>█</span>
             </div>
 
+            {/* Video Loading Status */}
+            {progress > 20 && (
+              <div className="flex items-center gap-2 text-xs text-cyan-300/70">
+                <span>HERO VIDEO:</span>
+                <span className={videoLoaded ? 'text-green-400' : 'text-yellow-400'}>
+                  {videoLoaded ? '✓ LOADED' : '⟳ LOADING...'}
+                </span>
+              </div>
+            )}
+
             {/* Progress Bar */}
             <div className="space-y-2 pt-4">
               <div className="flex justify-between items-center text-sm text-cyan-300">
@@ -164,18 +233,22 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
         </div>
 
         {/* Status Indicators */}
-        <div className="grid grid-cols-3 gap-4 text-center font-mono text-sm sm:text-base">
+        <div className="grid grid-cols-4 gap-4 text-center font-mono text-sm sm:text-base">
           <div className="space-y-2">
-            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 30 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
-            <div className={`font-bold ${progress > 30 ? 'text-green-400' : 'text-gray-500'}`}>NEURAL NET</div>
+            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 25 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
+            <div className={`font-bold text-xs ${progress > 25 ? 'text-green-400' : 'text-gray-500'}`}>NEURAL NET</div>
           </div>
           <div className="space-y-2">
-            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 60 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
-            <div className={`font-bold ${progress > 60 ? 'text-green-400' : 'text-gray-500'}`}>AI MODULES</div>
+            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 50 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
+            <div className={`font-bold text-xs ${progress > 50 ? 'text-green-400' : 'text-gray-500'}`}>VIDEO</div>
           </div>
           <div className="space-y-2">
-            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 90 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
-            <div className={`font-bold ${progress > 90 ? 'text-green-400' : 'text-gray-500'}`}>READY</div>
+            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 75 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
+            <div className={`font-bold text-xs ${progress > 75 ? 'text-green-400' : 'text-gray-500'}`}>AI MODULES</div>
+          </div>
+          <div className="space-y-2">
+            <div className={`w-4 h-4 mx-auto rounded-full ${progress > 95 ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)]' : 'bg-gray-600'} animate-pulse`}></div>
+            <div className={`font-bold text-xs ${progress > 95 ? 'text-green-400' : 'text-gray-500'}`}>READY</div>
           </div>
         </div>
       </div>

@@ -4,9 +4,11 @@ import { ChevronDown } from "lucide-react";
 
 interface HeroVideoProps {
   onVideoStart?: () => void;
+  preloadedVideo?: HTMLVideoElement | null;
+  thumbnail?: string | null;
 }
 
-const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
+const HeroVideo = ({ onVideoStart, preloadedVideo, thumbnail }: HeroVideoProps) => {
   const [showButton, setShowButton] = useState(true);
   const [videoStarted, setVideoStarted] = useState(false);
   const [scrollEnabled, setScrollEnabled] = useState(false);
@@ -58,15 +60,24 @@ const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
     setShowButton(false);
     setVideoStarted(true);
     
-    // Load and play the video from the beginning
+    // Use preloaded video if available
     if (videoRef.current) {
-      // Load video source if not already loaded
-      if (videoRef.current.children.length === 0) {
+      if (preloadedVideo) {
+        // Clone the preloaded video source
         const source = document.createElement('source');
         source.src = '/videos/hero-video.mp4';
         source.type = 'video/mp4';
         videoRef.current.appendChild(source);
         videoRef.current.load();
+      } else {
+        // Fallback: load video source if not preloaded
+        if (videoRef.current.children.length === 0) {
+          const source = document.createElement('source');
+          source.src = '/videos/hero-video.mp4';
+          source.type = 'video/mp4';
+          videoRef.current.appendChild(source);
+          videoRef.current.load();
+        }
       }
       
       videoRef.current.currentTime = 0;
@@ -134,7 +145,7 @@ const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
           muted
           playsInline
           preload="none"
-          poster="/placeholder.svg"
+          poster={thumbnail || "/placeholder.svg"}
         >
           {/* Source will be added dynamically when user clicks Explore */}
         </video>
@@ -163,10 +174,24 @@ const HeroVideo = ({ onVideoStart }: HeroVideoProps) => {
               <Button
                 onClick={handleExploreClick}
                 size="lg"
-                className="group relative overflow-hidden bg-primary px-8 py-6 text-lg font-semibold text-primary-foreground shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-primary/50"
+                className="group relative overflow-hidden px-8 py-6 text-lg font-semibold shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-primary/50"
+                style={{
+                  backgroundImage: thumbnail 
+                    ? `url(${thumbnail})` 
+                    : 'url(/images/hero-thumbnail-placeholder.svg)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                }}
               >
-                <span className="relative z-10">Explore</span>
-                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-primary to-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                {/* Dark overlay for better text readability */}
+                <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/30" />
+                
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-primary to-accent opacity-0 transition-opacity duration-300 group-hover:opacity-60" />
+                
+                {/* Text */}
+                <span className="relative z-10 text-white drop-shadow-lg font-bold">Explore</span>
               </Button>
               <div className="mt-12 animate-float">
                 <ChevronDown className="h-8 w-8 text-white/70" />

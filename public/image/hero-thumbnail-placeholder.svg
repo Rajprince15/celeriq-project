@@ -1,0 +1,43 @@
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgb(139,92,246);stop-opacity:1" />
+      <stop offset="50%" style="stop-color:rgb(59,130,246);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(6,182,212);stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:rgb(139,92,246);stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:rgb(6,182,212);stop-opacity:0.2" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="#000000"/>
+  
+  <!-- Gradient overlay -->
+  <rect width="1920" height="1080" fill="url(#grad1)" opacity="0.4"/>
+  
+  <!-- Glow effect -->
+  <circle cx="960" cy="540" r="400" fill="url(#glow)" opacity="0.6"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.1" stroke="#06B6D4" stroke-width="1">
+    <line x1="0" y1="270" x2="1920" y2="270"/>
+    <line x1="0" y1="540" x2="1920" y2="540"/>
+    <line x1="0" y1="810" x2="1920" y2="810"/>
+    <line x1="480" y1="0" x2="480" y2="1080"/>
+    <line x1="960" y1="0" x2="960" y2="1080"/>
+    <line x1="1440" y1="0" x2="1440" y2="1080"/>
+  </g>
+  
+  <!-- Central design element -->
+  <circle cx="960" cy="540" r="150" fill="none" stroke="#06B6D4" stroke-width="3" opacity="0.6"/>
+  <circle cx="960" cy="540" r="100" fill="none" stroke="#8B5CF6" stroke-width="2" opacity="0.8"/>
+  <circle cx="960" cy="540" r="50" fill="#3B82F6" opacity="0.5"/>
+  
+  <!-- Particles -->
+  <circle cx="800" cy="400" r="4" fill="#06B6D4" opacity="0.8"/>
+  <circle cx="1120" cy="680" r="3" fill="#8B5CF6" opacity="0.7"/>
+  <circle cx="700" cy="600" r="5" fill="#3B82F6" opacity="0.6"/>
+  <circle cx="1220" cy="420" r="4" fill="#06B6D4" opacity="0.8"/>
+</svg>
