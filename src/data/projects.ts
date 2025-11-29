@@ -87,7 +87,7 @@ export const projects: Project[] = [
     techStack: ["React", "Python", "MySQL", "Redis", "Stripe", "PWA", "Tailwind CSS"],
     liveLink: "https://geeessopticals.netlify.app",
     videoPath: "/videos/projects/project-7.mp4",
-    thumbnail: "/videos/projects/project-7.mp4",
+    thumbnail: "/placeholder.svg",
     category: "E-commerce",
     accentColor: "from-indigo-500 to-blue-600"
   },
