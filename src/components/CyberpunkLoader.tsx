@@ -15,7 +15,7 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
   const loadingMessages = [
     'INITIALIZING SYSTEM...',
     'LOADING NEURAL NETWORKS...',
-    
+
     'LOADING PROJECT ASSETS...',
     'SYNCING AI MODULES...',
     'OPTIMIZING PERFORMANCE...',
@@ -94,16 +94,19 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
 
     const interval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 100 && videoLoaded) {
+        if (prev >= 100) {
+          if (videoLoaded) {
           clearInterval(interval);
           setTimeout(() => {
             const videoElement = (window as any).__heroVideoElement || null;
             const thumbnail = (window as any).__heroThumbnail || null;
             onComplete(videoElement, thumbnail);
           }, 300);
-          return 100;
         }
-        return prev + 1;
+          return 100;
+
+        }
+        return Math.min(prev + 1, 100); // Ensure we never exceed 100
       });
     }, stepDuration);
 
@@ -116,9 +119,10 @@ const CyberpunkLoader = ({ onComplete }: CyberpunkLoaderProps) => {
     if (messageIndex < loadingMessages.length) {
       setCurrentMessage(loadingMessages[messageIndex]);
     }
-    // Simulate resource count for visual effect
-    setLoadedCount(Math.floor((progress / 100) * 10));
-    setTotalResources(10);
+    // Simulate resource count for visual effect - cap at total resources
+    const totalRes = 10;
+    setLoadedCount(Math.min(Math.floor((progress / 100) * totalRes), totalRes));
+    setTotalResources(totalRes);
   }, [progress]);
 
   return (
